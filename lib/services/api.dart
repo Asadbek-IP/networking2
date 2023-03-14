@@ -4,25 +4,25 @@ import 'package:http/http.dart' as http;
 import 'package:networking2/model/post.dart';
 
 class ApiService {
-  static String baseUrl = "https://jsonplaceholder.typicode.com";
+  static String baseUrl = "https://dummy.restapiexample.com/api/v1";
   static Map<String, String> headerApi = {
     "Content-type": "application/json; charset=UTF-8"
   };
 
-  static String getApi = "/posts";
-  static String postApi = "/posts";
-  static String putApi = "/posts/"; // id
-  static String deleteApi = "/posts/"; // id
+  static String getApi = "/employees";
+  static String postApi = "/create";
+  static String putApi = "/update/"; // id
+  static String deleteApi = "/delete/"; // id
 
   static Future<String> getMethod() async {
     var uri = Uri.parse(baseUrl + getApi); // uri qismi
-    var javob = await http.get(uri); // response
+    var javob = await http.get(uri, headers: headerApi); // response
     return javob.body;
   }
 
-  static Future<String> postMethod(Post post) async {
+  static Future<String> postMethod(Employee employee) async {
     var uri = Uri.parse(baseUrl + postApi); // uri qismi
-    Map map = post.toMap();
+    Map map = employee.toMap();
     String json = jsonEncode(map);
 
     var javob =
@@ -31,11 +31,11 @@ class ApiService {
     return javob.body;
   }
 
-  static Future<String> putMethod(Post post, int id) async {
+  static Future<String> putMethod(Employee employee, int id) async {
     var uri = Uri.parse(baseUrl + putApi + id.toString()); // uri qismi
 
     var javob = await http.put(uri,
-        headers: headerApi, body: jsonEncode(post.toMap())); // response
+        headers: headerApi, body: jsonEncode(employee.toMap())); // response
 
     if (javob.statusCode == 200) {
       return javob.body;

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:networking2/services/api.dart';
 
 import 'model/post.dart';
@@ -22,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     //getApi();
-    //postApi();
+    // postApi();
     //putApi();
     deleteApi();
     super.initState();
@@ -32,9 +35,9 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       isLoading = true;
     });
-    ApiService.getMethod().then((value) {
+    ApiService.getMethod().then((v) {
       setState(() {
-        res = value;
+        res = v;
         isLoading = false;
       });
     });
@@ -44,11 +47,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       isLoading = true;
     });
-
-    Post post = Post(title: "Atham", body: "Flutter kursi", id: 123);
-    ApiService.postMethod(post).then((value) {
+    Employee employee = Employee(name: "Yuluzcha", salary: "1000\$", age: 2);
+    ApiService.postMethod(employee).then((javob) {
       setState(() {
-        res = value;
+        res = javob;
         isLoading = false;
       });
     });
@@ -59,8 +61,8 @@ class _MyAppState extends State<MyApp> {
       isLoading = true;
     });
 
-    Post post = Post(title: "Bekzod", body: "Flutter kursi", id: 123);
-    ApiService.putMethod(post, 2).then((value) {
+    Employee employee = Employee(name: "Yuluzcha", salary: "1000\$", age: 2);
+    ApiService.putMethod(employee, 2108).then((value) {
       setState(() {
         res = value;
         isLoading = false;
@@ -73,7 +75,7 @@ class _MyAppState extends State<MyApp> {
       isLoading = true;
     });
 
-    ApiService.deleteMethod(2).then((value) {
+    ApiService.deleteMethod(2108).then((value) {
       setState(() {
         res = value;
         isLoading = false;
@@ -86,14 +88,31 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(child: Image.asset("assets/images/loading.gif"))
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(res),
-                  ElevatedButton(
-                      onPressed: () {}, child: const Text("Javobni olish"))
+                  // ElevatedButton(
+                  //     onPressed: () async {
+                  //       Employee xodim1 =
+                  //           Employee(name: "Yulduz", salary: "1000\$", age: 16);
+                  //       Map map = xodim1.toMap();
+                  //       var uri = Uri.parse(
+                  //           "https://dummy.restapiexample.com/api/v1/create");
+
+                  //       var javob = await post(uri,
+                  //           headers: {
+                  //             "Content-type": "application/json; charset=UTF-8"
+                  //           },
+                  //           body: jsonEncode(map));
+
+                  //       setState(() {
+                  //         res = javob.body;
+                  //       });
+                  //     },
+                  //     child: const Text("Javob olish"))
                 ],
               ),
       ),

@@ -1,11 +1,11 @@
-class Post {
-  String title;
-  String body;
-  int id;
+class Employee {
+  String name;
+  String salary;
+  int age;
 
-  Post({required this.title, required this.body, required this.id});
+  Employee({required this.name, required this.salary, required this.age});
 
   Map toMap() {
-    return {"title": title, "body": body, "id": id};
+    return {"name": name, "salary": salary, "age": age};
   }
 }
