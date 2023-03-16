@@ -1,10 +1,10 @@
-import 'dart:convert';
+import 'dart:js';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:networking2/model/employee_list.dart';
 import 'package:networking2/services/api.dart';
 
-import 'model/post.dart';
+import 'model/employee_get.dart';
 
 void main(List<String> args) {
   runApp(const MyApp());
@@ -27,8 +27,23 @@ class _MyAppState extends State<MyApp> {
     //getApi();
     // postApi();
     //putApi();
-    deleteApi();
+    //deleteApi();
+    getEmpList();
     super.initState();
+  }
+
+  List<EmployeeSingle> ishchilar = [];
+
+  void getEmpList() async {
+    setState(() {
+      isLoading = true;
+    });
+    ApiService.getEmployeeList().then((value) {
+      setState(() {
+        ishchilar = value!;
+        isLoading = false;
+      });
+    });
   }
 
   void getApi() {
@@ -89,33 +104,41 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: isLoading
             ? Center(child: Image.asset("assets/images/loading.gif"))
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(res),
-                  // ElevatedButton(
-                  //     onPressed: () async {
-                  //       Employee xodim1 =
-                  //           Employee(name: "Yulduz", salary: "1000\$", age: 16);
-                  //       Map map = xodim1.toMap();
-                  //       var uri = Uri.parse(
-                  //           "https://dummy.restapiexample.com/api/v1/create");
-
-                  //       var javob = await post(uri,
-                  //           headers: {
-                  //             "Content-type": "application/json; charset=UTF-8"
-                  //           },
-                  //           body: jsonEncode(map));
-
-                  //       setState(() {
-                  //         res = javob.body;
-                  //       });
-                  //     },
-                  //     child: const Text("Javob olish"))
-                ],
+            : ListView.builder(
+                itemCount: ishchilar.length,
+                itemBuilder: (context, index) => empListItem(ishchilar[index],context),
               ),
       ),
     );
   }
+}
+
+Widget empListItem(EmployeeSingle ishchi,BuildContext context) {
+  return InkWell(
+    onTap: (){
+    //  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsPage(ishchi.id)));
+    },
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${ishchi.employeeName}(${ishchi.employeeAge})",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "${ishchi.employeeSalary}\$",
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+          Divider()
+        ],
+      ),
+    ),
+  );
 }
