@@ -59,13 +59,14 @@ class ApiService {
   }
 
   // parsing api
-
   static Future<List<EmployeeSingle>?> getEmployeeList() async {
     var uri = Uri.parse(baseUrl + getApi); // uri qismi
     var javob = await http.get(uri, headers: headerApi); // response
-
+   
+     print(javob.body);
     if (javob.statusCode == 200) {
       EmpolyeeList empolyeeList = EmpolyeeList.fromJson(jsonDecode(javob.body));
+   
       return empolyeeList.employees;
     } else {
       return null;

@@ -30,7 +30,7 @@ class EmployeeSingle {
     required this.employeeImage,
   });
 
-  factory EmployeeSingle.fromJson(Map<String, dynamic> json) {
+    factory EmployeeSingle.fromJson(Map<String, dynamic> json) {
     return EmployeeSingle(
         id: json["id"],
         employeeName: json["employee_name"],
