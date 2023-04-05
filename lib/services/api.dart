@@ -4,7 +4,10 @@ import 'package:http/http.dart' as http;
 
 import 'package:networking2/model/employee_get.dart';
 import 'package:networking2/model/employee_list.dart';
+import 'package:networking2/model/res_update_employee.dart';
+
 import 'package:networking2/model/single_employee_model.dart';
+import 'package:networking2/model/response_delete_emp.dart';
 
 import '../model/create_emp_model.dart';
 import '../model/response_emp_single.dart';
@@ -68,11 +71,10 @@ class ApiService {
   static Future<List<EmployeeSingle>?> getEmployeeList() async {
     var uri = Uri.parse(baseUrl + getApi); // uri qismi
     var javob = await http.get(uri, headers: headerApi); // response
-   
-    
+
     if (javob.statusCode == 200) {
       EmpolyeeList empolyeeList = EmpolyeeList.fromJson(jsonDecode(javob.body));
-   
+
       return empolyeeList.employees;
     } else {
       return null;
@@ -80,36 +82,61 @@ class ApiService {
   }
 
   static Future<EmployeeSingle> getEmployeeSingle(int id) async {
-    var uri = Uri.parse(baseUrl+getEmpSingleApi+id.toString());
+    var uri = Uri.parse(baseUrl + getEmpSingleApi + id.toString());
     var res = await http.get(uri);
     print(res.statusCode);
-     if(res.statusCode==200){
+    if (res.statusCode == 200) {
       EmpSingle emp = EmpSingle.fromJson(jsonDecode(res.body));
       return emp.employee!;
-      }else{
-        return getEmployeeSingle(id);
-      }
-    
+    } else {
+      return getEmployeeSingle(id);
+    }
   }
-  
 
-   static Future<ResEmpModel> createEmployee(Employee employee) async {
-    var uri = Uri.parse(baseUrl+postApi);
+  static Future<ResEmpModel> createEmployee(Employee employee) async {
+    var uri = Uri.parse(baseUrl + postApi);
 
     Map map = employee.toMap();
     String json = jsonEncode(map);
-    var res = await http.post(uri,body: json,headers: headerApi);
+    var res = await http.post(uri, body: json, headers: headerApi);
     print(res.statusCode);
-     if(res.statusCode==200){
+    if (res.statusCode == 200) {
       print(res.body);
-      CreateResEmpSingle emp = CreateResEmpSingle.fromJson(jsonDecode(res.body));
+      CreateResEmpSingle emp =
+          CreateResEmpSingle.fromJson(jsonDecode(res.body));
       return emp.data;
-      }else{
-        return createEmployee(employee);
-      }
-    
+    } else {
+      return createEmployee(employee);
+    }
   }
-  
+
+  static Future<ResponseUpdateEmployee> updateEmployee(
+      Employee employee, int id) async {
+    var uri = Uri.parse(baseUrl + putApi + id.toString());
+
+    Map map = employee.toMap();
+    String json = jsonEncode(map);
+    var res = await http.put(uri, body: json, headers: headerApi);
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      print(res.body);
+      ResponseUpdateEmployee emp =
+          ResponseUpdateEmployee.fromJson(jsonDecode(res.body));
+      return emp;
+    } else {
+      return updateEmployee(employee, id);
+    }
+  }
+
+  static Future<ResponseDeleteEmployee> deleteEmployee(int id) async {
+    var uri = Uri.parse(baseUrl + deleteApi + id.toString()); // uri qismi
+
+    var javob = await http.delete(uri, headers: headerApi); // response
+     print(javob.statusCode);
+    if (javob.statusCode == 200) {
+      return ResponseDeleteEmployee.fromJson(jsonDecode(javob.body));
+    } else {
+      return deleteEmployee(id);
+    }
+  }
 }
-
-
